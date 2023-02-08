@@ -1,6 +1,8 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { useUser } from '../stores/user'
 import Home from '../views/Home/index.vue'
+import ArticleList from '../views/Home/articleList.vue'
+//
 import Search from '../views/Search/index.vue'
 import Login from '../views/Login/index.vue'
 import Article from '../views/Article/index.vue'
@@ -9,14 +11,22 @@ import Register from '../views/Register/index.vue'
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
+    // {
+    //   path: '/',
+    //   redirect: '/home'
+    // },
     {
       path: '/',
-      redirect: '/home'
-    },
-    {
-      path: '/home',
       name: 'home',
-      component: Home
+      component: Home,
+      children: [
+        {
+          path: '/',
+          name: 'all',
+          component: ArticleList
+        }
+      ]
+      // redirect: '/all'
     },
     {
       path: '/search',

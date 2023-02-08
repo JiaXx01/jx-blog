@@ -1,7 +1,7 @@
 <template>
   <!-- <header class="w-full shadow bg-white"> -->
-  <header class="sticky top-0 w-full shadow bg-white">
-    <nav class="flex items-center justify-between max-w-7xl px-10 h-12 my-0 mx-auto">
+  <header class="sticky top-0 w-full shadow bg-white z-10">
+    <nav class="flex items-center justify-between max-w-7xl px-10 h-14 my-0 mx-auto">
       <div class="flex items-center">
         <div>
           <span v-for="(item, index) in logo" :key="index" class="text-3xl" :style="{ color: item.color }">{{
@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import UserAvatar from '../User/UserAvatar.vue'
 import UserCard from '../User/UserCard.vue'
 import LoginAndRegister from '../LoginAndRegister.vue'
@@ -77,6 +77,10 @@ const toLoginAndRegisterRef = ref()
 const toLoginAndRegister = (type) => {
   toLoginAndRegisterRef.value.showPanel(type)
 }
+
+watch(() => store.showLoginAndRegister, (newVal, oldVal) => {
+  if (newVal) toLoginAndRegister(1)
+})
 </script>
 
 <style scoped>

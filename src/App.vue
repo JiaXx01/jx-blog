@@ -1,6 +1,8 @@
 <template>
   <GlobalHeader></GlobalHeader>
-  <router-view></router-view>
+  <main class="bg-gray-100">
+    <router-view></router-view>
+  </main>
   <!-- <GlobalFooter></GlobalFooter> -->
 </template>
 
@@ -14,6 +16,9 @@ const onScroll = (scrolltype) => {
 handlerScrollType(onScroll)
 </script>
 
-<style lang="scss" scoped>
-
+<style lang="scss">
+body {
+  --tw-bg-opacity: 1;
+  background-color: rgba(243, 244, 246, var(--tw-bg-opacity));
+}
 </style>

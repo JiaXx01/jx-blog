@@ -25,7 +25,7 @@ requests.interceptors.response.use(
   res => {
     // 进度条结束
     NProgress.done()
-    return res.data
+    return res
   },
   error => {
     const { message } = error.response.data

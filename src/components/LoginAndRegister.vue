@@ -32,6 +32,9 @@
           </template>
         </el-input>
       </el-form-item>
+      <el-form-item v-if="openType">
+        <el-checkbox v-model="formData.rememberMe">记住我(30天内)</el-checkbox>
+      </el-form-item>
       <!-- 忘记密码 / 注册 / 已有账号 -->
       <el-form-item>
         <div class="flex items-center justify-between w-full text-blue-400" v-if="openType">
@@ -55,6 +58,7 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { useUser } from '../stores/user'
+import md5 from 'js-md5'
 const userStore = useUser()
 const checkPassword = (rule, value, callback) => {
   if (value !== formData.password) callback(new Error('密码不一致'))
@@ -111,19 +115,24 @@ const handleClose = () => {
   // 清空表单以及校验提示
   show.value = false
   formRef.value.resetFields()
+  userStore.showLoginAndRegister = false
 }
 
 // 登录 / 注册
 const submitLoginOrRegister = async (formRef) => {
   await formRef.validate(async (valid) => {
     if (valid) {
+      const { email, password } = formData
+      const params = { email, password }
+      params.password = md5(params.password)
       if (openType.value) {
         // 登录
-        const data = await userStore.login(formData)
-        console.log(data)
+        await userStore.login(params)
+        handleClose()
       } else {
         // 注册
-        await userStore.register(formData)
+        params.nickName = formData.nickName
+        await userStore.register(params)
         // 注册后转到登录
         showPanel(1)
       }

@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { useArticle } from './article'
 import { reqUserRegister, reqUserLogin, reqUserInfo } from '../api/user'
 
 export const useUser = defineStore('user', {
@@ -9,7 +10,8 @@ export const useUser = defineStore('user', {
     avatarUrl: '',
     userId: '',
     name: '',
-    headline: ''
+    headline: '',
+    showLoginAndRegister: false
   }),
 
   actions: {
@@ -23,11 +25,12 @@ export const useUser = defineStore('user', {
     // 登录
     async login (data) {
       try {
-        const { token } = await reqUserLogin(data)
-        this.token = token
-        localStorage.setItem('token', token)
+        const res = await reqUserLogin(data)
+        this.token = res.data.token
+        localStorage.setItem('token', res.data.token)
+        // 获取用户信息
         this.getUserInfo()
-        return token
+        return res
       } catch (error) {
         console.log(error)
       }
@@ -48,6 +51,9 @@ export const useUser = defineStore('user', {
           userId,
           isLogin: true
         })
+        // 获取话题列表信息
+        const articleStore = useArticle()
+        articleStore.getTopicList()
       } catch (error) {
         return Promise.reject(new Error(error))
       }
